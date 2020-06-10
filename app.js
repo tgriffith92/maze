@@ -1,6 +1,6 @@
 const { Engine, Render, Runner, World, Bodies, Body, Events } = Matter;
 
-const cells = 3;
+const cells = 6;
 const width = 600;
 const height = 600;
 
@@ -116,6 +116,7 @@ horizontals.forEach((row, rowIndex) => {
 			unitLength,
 			5,
 			{
+				label: 'wall',
 				isStatic: true
 			}
 		);
@@ -135,6 +136,7 @@ verticals.forEach((row, rowIndex) => {
 			5,
 			unitLength,
 			{
+				label: 'wall',
 				isStatic: true
 			}
 		);
@@ -179,7 +181,12 @@ Events.on(engine, 'collisionStart', (event) => {
 		const labels = [ 'ball', 'goal' ];
 
 		if (labels.includes(collision.bodyA.label) && labels.includes(collision.bodyB.label)) {
-			console.log('User won!');
+			world.gravity.y = 1;
+			world.bodies.forEach((body) => {
+				if (body.label === 'wall') {
+					Body.setStatic(body, false);
+				}
+			});
 		}
 	});
 });
